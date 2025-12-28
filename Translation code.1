@@ -1,0 +1,589 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "VOELLUsKhxkL",
+        "outputId": "e3c236dd-31e2-469a-fa96-77b32f70223d"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting googletrans==4.0.0-rc1\n",
+            "  Downloading googletrans-4.0.0rc1.tar.gz (20 kB)\n",
+            "  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Collecting PyPDF2\n",
+            "  Downloading pypdf2-3.0.1-py3-none-any.whl.metadata (6.8 kB)\n",
+            "Collecting reportlab\n",
+            "  Downloading reportlab-4.4.3-py3-none-any.whl.metadata (1.7 kB)\n",
+            "Collecting httpx==0.13.3 (from googletrans==4.0.0-rc1)\n",
+            "  Downloading httpx-0.13.3-py3-none-any.whl.metadata (25 kB)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.11/dist-packages (from httpx==0.13.3->googletrans==4.0.0-rc1) (2025.7.14)\n",
+            "Collecting hstspreload (from httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading hstspreload-2025.1.1-py3-none-any.whl.metadata (2.1 kB)\n",
+            "Requirement already satisfied: sniffio in /usr/local/lib/python3.11/dist-packages (from httpx==0.13.3->googletrans==4.0.0-rc1) (1.3.1)\n",
+            "Collecting chardet==3.* (from httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading chardet-3.0.4-py2.py3-none-any.whl.metadata (3.2 kB)\n",
+            "Collecting idna==2.* (from httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading idna-2.10-py2.py3-none-any.whl.metadata (9.1 kB)\n",
+            "Collecting rfc3986<2,>=1.3 (from httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading rfc3986-1.5.0-py2.py3-none-any.whl.metadata (6.5 kB)\n",
+            "Collecting httpcore==0.9.* (from httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading httpcore-0.9.1-py3-none-any.whl.metadata (4.6 kB)\n",
+            "Collecting h11<0.10,>=0.8 (from httpcore==0.9.*->httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading h11-0.9.0-py2.py3-none-any.whl.metadata (8.1 kB)\n",
+            "Collecting h2==3.* (from httpcore==0.9.*->httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading h2-3.2.0-py2.py3-none-any.whl.metadata (32 kB)\n",
+            "Collecting hyperframe<6,>=5.2.0 (from h2==3.*->httpcore==0.9.*->httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading hyperframe-5.2.0-py2.py3-none-any.whl.metadata (7.2 kB)\n",
+            "Collecting hpack<4,>=3.0 (from h2==3.*->httpcore==0.9.*->httpx==0.13.3->googletrans==4.0.0-rc1)\n",
+            "  Downloading hpack-3.0.0-py2.py3-none-any.whl.metadata (7.0 kB)\n",
+            "Requirement already satisfied: pillow>=9.0.0 in /usr/local/lib/python3.11/dist-packages (from reportlab) (11.3.0)\n",
+            "Requirement already satisfied: charset-normalizer in /usr/local/lib/python3.11/dist-packages (from reportlab) (3.4.2)\n",
+            "Downloading httpx-0.13.3-py3-none-any.whl (55 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m55.1/55.1 kB\u001b[0m \u001b[31m4.0 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading chardet-3.0.4-py2.py3-none-any.whl (133 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m133.4/133.4 kB\u001b[0m \u001b[31m6.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading httpcore-0.9.1-py3-none-any.whl (42 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m42.6/42.6 kB\u001b[0m \u001b[31m2.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading idna-2.10-py2.py3-none-any.whl (58 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m58.8/58.8 kB\u001b[0m \u001b[31m4.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading h2-3.2.0-py2.py3-none-any.whl (65 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m65.0/65.0 kB\u001b[0m \u001b[31m4.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pypdf2-3.0.1-py3-none-any.whl (232 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m232.6/232.6 kB\u001b[0m \u001b[31m16.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading reportlab-4.4.3-py3-none-any.whl (2.0 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m2.0/2.0 MB\u001b[0m \u001b[31m44.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading rfc3986-1.5.0-py2.py3-none-any.whl (31 kB)\n",
+            "Downloading hstspreload-2025.1.1-py3-none-any.whl (1.3 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.3/1.3 MB\u001b[0m \u001b[31m53.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading h11-0.9.0-py2.py3-none-any.whl (53 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m53.6/53.6 kB\u001b[0m \u001b[31m3.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading hpack-3.0.0-py2.py3-none-any.whl (38 kB)\n",
+            "Downloading hyperframe-5.2.0-py2.py3-none-any.whl (12 kB)\n",
+            "Building wheels for collected packages: googletrans\n",
+            "  Building wheel for googletrans (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for googletrans: filename=googletrans-4.0.0rc1-py3-none-any.whl size=17396 sha256=aaa298a211d96f45d4960073daf471964b7df5a9e789a9282d9be366038ba5f4\n",
+            "  Stored in directory: /root/.cache/pip/wheels/39/17/6f/66a045ea3d168826074691b4b787b8f324d3f646d755443fda\n",
+            "Successfully built googletrans\n",
+            "Installing collected packages: rfc3986, hyperframe, hpack, h11, chardet, reportlab, PyPDF2, idna, hstspreload, h2, httpcore, httpx, googletrans\n",
+            "  Attempting uninstall: hyperframe\n",
+            "    Found existing installation: hyperframe 6.1.0\n",
+            "    Uninstalling hyperframe-6.1.0:\n",
+            "      Successfully uninstalled hyperframe-6.1.0\n",
+            "  Attempting uninstall: hpack\n",
+            "    Found existing installation: hpack 4.1.0\n",
+            "    Uninstalling hpack-4.1.0:\n",
+            "      Successfully uninstalled hpack-4.1.0\n",
+            "  Attempting uninstall: h11\n",
+            "    Found existing installation: h11 0.16.0\n",
+            "    Uninstalling h11-0.16.0:\n",
+            "      Successfully uninstalled h11-0.16.0\n",
+            "  Attempting uninstall: chardet\n",
+            "    Found existing installation: chardet 5.2.0\n",
+            "    Uninstalling chardet-5.2.0:\n",
+            "      Successfully uninstalled chardet-5.2.0\n",
+            "  Attempting uninstall: idna\n",
+            "    Found existing installation: idna 3.10\n",
+            "    Uninstalling idna-3.10:\n",
+            "      Successfully uninstalled idna-3.10\n",
+            "  Attempting uninstall: h2\n",
+            "    Found existing installation: h2 4.2.0\n",
+            "    Uninstalling h2-4.2.0:\n",
+            "      Successfully uninstalled h2-4.2.0\n",
+            "  Attempting uninstall: httpcore\n",
+            "    Found existing installation: httpcore 1.0.9\n",
+            "    Uninstalling httpcore-1.0.9:\n",
+            "      Successfully uninstalled httpcore-1.0.9\n",
+            "  Attempting uninstall: httpx\n",
+            "    Found existing installation: httpx 0.28.1\n",
+            "    Uninstalling httpx-0.28.1:\n",
+            "      Successfully uninstalled httpx-0.28.1\n",
+            "\u001b[31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n",
+            "google-genai 1.27.0 requires httpx<1.0.0,>=0.28.1, but you have httpx 0.13.3 which is incompatible.\n",
+            "firebase-admin 6.9.0 requires httpx[http2]==0.28.1, but you have httpx 0.13.3 which is incompatible.\n",
+            "openai 1.97.1 requires httpx<1,>=0.23.0, but you have httpx 0.13.3 which is incompatible.\n",
+            "gradio 5.38.2 requires httpx<1.0,>=0.24.1, but you have httpx 0.13.3 which is incompatible.\n",
+            "gradio-client 1.11.0 requires httpx>=0.24.1, but you have httpx 0.13.3 which is incompatible.\n",
+            "langsmith 0.4.8 requires httpx<1,>=0.23.0, but you have httpx 0.13.3 which is incompatible.\u001b[0m\u001b[31m\n",
+            "\u001b[0mSuccessfully installed PyPDF2-3.0.1 chardet-3.0.4 googletrans-4.0.0rc1 h11-0.9.0 h2-3.2.0 hpack-3.0.0 hstspreload-2025.1.1 httpcore-0.9.1 httpx-0.13.3 hyperframe-5.2.0 idna-2.10 reportlab-4.4.3 rfc3986-1.5.0\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install googletrans==4.0.0-rc1 PyPDF2 reportlab\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install PyPDF2 reportlab deep-translator"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "7sZ2Htk0iID1",
+        "outputId": "d082f98f-0f2b-4409-d667-a54bd97eaf7a"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: PyPDF2 in /usr/local/lib/python3.11/dist-packages (3.0.1)\n",
+            "Requirement already satisfied: reportlab in /usr/local/lib/python3.11/dist-packages (4.4.3)\n",
+            "Collecting deep-translator\n",
+            "  Downloading deep_translator-1.11.4-py3-none-any.whl.metadata (30 kB)\n",
+            "Requirement already satisfied: pillow>=9.0.0 in /usr/local/lib/python3.11/dist-packages (from reportlab) (11.3.0)\n",
+            "Requirement already satisfied: charset-normalizer in /usr/local/lib/python3.11/dist-packages (from reportlab) (3.4.2)\n",
+            "Requirement already satisfied: beautifulsoup4<5.0.0,>=4.9.1 in /usr/local/lib/python3.11/dist-packages (from deep-translator) (4.13.4)\n",
+            "Requirement already satisfied: requests<3.0.0,>=2.23.0 in /usr/local/lib/python3.11/dist-packages (from deep-translator) (2.32.3)\n",
+            "Requirement already satisfied: soupsieve>1.2 in /usr/local/lib/python3.11/dist-packages (from beautifulsoup4<5.0.0,>=4.9.1->deep-translator) (2.7)\n",
+            "Requirement already satisfied: typing-extensions>=4.0.0 in /usr/local/lib/python3.11/dist-packages (from beautifulsoup4<5.0.0,>=4.9.1->deep-translator) (4.14.1)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/dist-packages (from requests<3.0.0,>=2.23.0->deep-translator) (2.10)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests<3.0.0,>=2.23.0->deep-translator) (2.5.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.11/dist-packages (from requests<3.0.0,>=2.23.0->deep-translator) (2025.7.14)\n",
+            "Downloading deep_translator-1.11.4-py3-none-any.whl (42 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m42.3/42.3 kB\u001b[0m \u001b[31m1.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: deep-translator\n",
+            "Successfully installed deep-translator-1.11.4\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import files\n",
+        "uploaded = files.upload()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 73
+        },
+        "id": "tGBiOj4RitSu",
+        "outputId": "05d37bf6-9577-46e8-f0fd-19598ede26d9"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ],
+            "text/html": [
+              "\n",
+              "     <input type=\"file\" id=\"files-f6399f50-78dd-44b9-a6e0-a68daa017f1b\" name=\"files[]\" multiple disabled\n",
+              "        style=\"border:none\" />\n",
+              "     <output id=\"result-f6399f50-78dd-44b9-a6e0-a68daa017f1b\">\n",
+              "      Upload widget is only available when the cell has been executed in the\n",
+              "      current browser session. Please rerun this cell to enable.\n",
+              "      </output>\n",
+              "      <script>// Copyright 2017 Google LLC\n",
+              "//\n",
+              "// Licensed under the Apache License, Version 2.0 (the \"License\");\n",
+              "// you may not use this file except in compliance with the License.\n",
+              "// You may obtain a copy of the License at\n",
+              "//\n",
+              "//      http://www.apache.org/licenses/LICENSE-2.0\n",
+              "//\n",
+              "// Unless required by applicable law or agreed to in writing, software\n",
+              "// distributed under the License is distributed on an \"AS IS\" BASIS,\n",
+              "// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n",
+              "// See the License for the specific language governing permissions and\n",
+              "// limitations under the License.\n",
+              "\n",
+              "/**\n",
+              " * @fileoverview Helpers for google.colab Python module.\n",
+              " */\n",
+              "(function(scope) {\n",
+              "function span(text, styleAttributes = {}) {\n",
+              "  const element = document.createElement('span');\n",
+              "  element.textContent = text;\n",
+              "  for (const key of Object.keys(styleAttributes)) {\n",
+              "    element.style[key] = styleAttributes[key];\n",
+              "  }\n",
+              "  return element;\n",
+              "}\n",
+              "\n",
+              "// Max number of bytes which will be uploaded at a time.\n",
+              "const MAX_PAYLOAD_SIZE = 100 * 1024;\n",
+              "\n",
+              "function _uploadFiles(inputId, outputId) {\n",
+              "  const steps = uploadFilesStep(inputId, outputId);\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  // Cache steps on the outputElement to make it available for the next call\n",
+              "  // to uploadFilesContinue from Python.\n",
+              "  outputElement.steps = steps;\n",
+              "\n",
+              "  return _uploadFilesContinue(outputId);\n",
+              "}\n",
+              "\n",
+              "// This is roughly an async generator (not supported in the browser yet),\n",
+              "// where there are multiple asynchronous steps and the Python side is going\n",
+              "// to poll for completion of each step.\n",
+              "// This uses a Promise to block the python side on completion of each step,\n",
+              "// then passes the result of the previous step as the input to the next step.\n",
+              "function _uploadFilesContinue(outputId) {\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  const steps = outputElement.steps;\n",
+              "\n",
+              "  const next = steps.next(outputElement.lastPromiseValue);\n",
+              "  return Promise.resolve(next.value.promise).then((value) => {\n",
+              "    // Cache the last promise value to make it available to the next\n",
+              "    // step of the generator.\n",
+              "    outputElement.lastPromiseValue = value;\n",
+              "    return next.value.response;\n",
+              "  });\n",
+              "}\n",
+              "\n",
+              "/**\n",
+              " * Generator function which is called between each async step of the upload\n",
+              " * process.\n",
+              " * @param {string} inputId Element ID of the input file picker element.\n",
+              " * @param {string} outputId Element ID of the output display.\n",
+              " * @return {!Iterable<!Object>} Iterable of next steps.\n",
+              " */\n",
+              "function* uploadFilesStep(inputId, outputId) {\n",
+              "  const inputElement = document.getElementById(inputId);\n",
+              "  inputElement.disabled = false;\n",
+              "\n",
+              "  const outputElement = document.getElementById(outputId);\n",
+              "  outputElement.innerHTML = '';\n",
+              "\n",
+              "  const pickedPromise = new Promise((resolve) => {\n",
+              "    inputElement.addEventListener('change', (e) => {\n",
+              "      resolve(e.target.files);\n",
+              "    });\n",
+              "  });\n",
+              "\n",
+              "  const cancel = document.createElement('button');\n",
+              "  inputElement.parentElement.appendChild(cancel);\n",
+              "  cancel.textContent = 'Cancel upload';\n",
+              "  const cancelPromise = new Promise((resolve) => {\n",
+              "    cancel.onclick = () => {\n",
+              "      resolve(null);\n",
+              "    };\n",
+              "  });\n",
+              "\n",
+              "  // Wait for the user to pick the files.\n",
+              "  const files = yield {\n",
+              "    promise: Promise.race([pickedPromise, cancelPromise]),\n",
+              "    response: {\n",
+              "      action: 'starting',\n",
+              "    }\n",
+              "  };\n",
+              "\n",
+              "  cancel.remove();\n",
+              "\n",
+              "  // Disable the input element since further picks are not allowed.\n",
+              "  inputElement.disabled = true;\n",
+              "\n",
+              "  if (!files) {\n",
+              "    return {\n",
+              "      response: {\n",
+              "        action: 'complete',\n",
+              "      }\n",
+              "    };\n",
+              "  }\n",
+              "\n",
+              "  for (const file of files) {\n",
+              "    const li = document.createElement('li');\n",
+              "    li.append(span(file.name, {fontWeight: 'bold'}));\n",
+              "    li.append(span(\n",
+              "        `(${file.type || 'n/a'}) - ${file.size} bytes, ` +\n",
+              "        `last modified: ${\n",
+              "            file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() :\n",
+              "                                    'n/a'} - `));\n",
+              "    const percent = span('0% done');\n",
+              "    li.appendChild(percent);\n",
+              "\n",
+              "    outputElement.appendChild(li);\n",
+              "\n",
+              "    const fileDataPromise = new Promise((resolve) => {\n",
+              "      const reader = new FileReader();\n",
+              "      reader.onload = (e) => {\n",
+              "        resolve(e.target.result);\n",
+              "      };\n",
+              "      reader.readAsArrayBuffer(file);\n",
+              "    });\n",
+              "    // Wait for the data to be ready.\n",
+              "    let fileData = yield {\n",
+              "      promise: fileDataPromise,\n",
+              "      response: {\n",
+              "        action: 'continue',\n",
+              "      }\n",
+              "    };\n",
+              "\n",
+              "    // Use a chunked sending to avoid message size limits. See b/62115660.\n",
+              "    let position = 0;\n",
+              "    do {\n",
+              "      const length = Math.min(fileData.byteLength - position, MAX_PAYLOAD_SIZE);\n",
+              "      const chunk = new Uint8Array(fileData, position, length);\n",
+              "      position += length;\n",
+              "\n",
+              "      const base64 = btoa(String.fromCharCode.apply(null, chunk));\n",
+              "      yield {\n",
+              "        response: {\n",
+              "          action: 'append',\n",
+              "          file: file.name,\n",
+              "          data: base64,\n",
+              "        },\n",
+              "      };\n",
+              "\n",
+              "      let percentDone = fileData.byteLength === 0 ?\n",
+              "          100 :\n",
+              "          Math.round((position / fileData.byteLength) * 100);\n",
+              "      percent.textContent = `${percentDone}% done`;\n",
+              "\n",
+              "    } while (position < fileData.byteLength);\n",
+              "  }\n",
+              "\n",
+              "  // All done.\n",
+              "  yield {\n",
+              "    response: {\n",
+              "      action: 'complete',\n",
+              "    }\n",
+              "  };\n",
+              "}\n",
+              "\n",
+              "scope.google = scope.google || {};\n",
+              "scope.google.colab = scope.google.colab || {};\n",
+              "scope.google.colab._files = {\n",
+              "  _uploadFiles,\n",
+              "  _uploadFilesContinue,\n",
+              "};\n",
+              "})(self);\n",
+              "</script> "
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Saving plan1.pdf to plan1 (2).pdf\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import PyPDF2\n",
+        "\n",
+        "with open(\"plan1.pdf\", \"rb\") as file:\n",
+        "    reader = PyPDF2.PdfReader(file)\n",
+        "    english_text = \"\"\n",
+        "    for page in reader.pages:\n",
+        "        english_text += page.extract_text() + \"\\n\""
+      ],
+      "metadata": {
+        "id": "rt9DiWqlkK_W"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from deep_translator import GoogleTranslator\n",
+        "\n",
+        "def translate_text_in_chunks(text, chunk_size=4500):\n",
+        "    translated_chunks = []\n",
+        "    for i in range(0, len(text), chunk_size):\n",
+        "        chunk = text[i:i + chunk_size]\n",
+        "        translated_chunk = GoogleTranslator(source='en', target='de').translate(chunk)\n",
+        "        translated_chunks.append(translated_chunk)\n",
+        "    return \"\".join(translated_chunks)\n",
+        "\n",
+        "german_text = translate_text_in_chunks(english_text)"
+      ],
+      "metadata": {
+        "id": "QxEUSxyekuvW"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from reportlab.pdfgen import canvas\n",
+        "from reportlab.lib.pagesizes import letter\n",
+        "\n",
+        "output_file = \"plan1_translated_german.pdf\"\n",
+        "pdf_canvas = canvas.Canvas(output_file, pagesize=letter)\n",
+        "\n",
+        "lines = german_text.split('\\n')\n",
+        "y = 750  # Starting Y position\n",
+        "\n",
+        "for line in lines:\n",
+        "    if y < 50:\n",
+        "        pdf_canvas.showPage()\n",
+        "        y = 750\n",
+        "    pdf_canvas.drawString(40, y, line[:110])  # Trim long lines\n",
+        "    y -= 15\n",
+        "\n",
+        "pdf_canvas.save()"
+      ],
+      "metadata": {
+        "id": "u1oHItDGk5UB"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "  files.download(\"plan1_translated_german.pdf\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 17
+        },
+        "id": "KkZzzdCnlpwe",
+        "outputId": "c7510388-4851-4f52-c7c0-be46929b447d"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Javascript object>"
+            ],
+            "application/javascript": [
+              "\n",
+              "    async function download(id, filename, size) {\n",
+              "      if (!google.colab.kernel.accessAllowed) {\n",
+              "        return;\n",
+              "      }\n",
+              "      const div = document.createElement('div');\n",
+              "      const label = document.createElement('label');\n",
+              "      label.textContent = `Downloading \"${filename}\": `;\n",
+              "      div.appendChild(label);\n",
+              "      const progress = document.createElement('progress');\n",
+              "      progress.max = size;\n",
+              "      div.appendChild(progress);\n",
+              "      document.body.appendChild(div);\n",
+              "\n",
+              "      const buffers = [];\n",
+              "      let downloaded = 0;\n",
+              "\n",
+              "      const channel = await google.colab.kernel.comms.open(id);\n",
+              "      // Send a message to notify the kernel that we're ready.\n",
+              "      channel.send({})\n",
+              "\n",
+              "      for await (const message of channel.messages) {\n",
+              "        // Send a message to notify the kernel that we're ready.\n",
+              "        channel.send({})\n",
+              "        if (message.buffers) {\n",
+              "          for (const buffer of message.buffers) {\n",
+              "            buffers.push(buffer);\n",
+              "            downloaded += buffer.byteLength;\n",
+              "            progress.value = downloaded;\n",
+              "          }\n",
+              "        }\n",
+              "      }\n",
+              "      const blob = new Blob(buffers, {type: 'application/binary'});\n",
+              "      const a = document.createElement('a');\n",
+              "      a.href = window.URL.createObjectURL(blob);\n",
+              "      a.download = filename;\n",
+              "      div.appendChild(a);\n",
+              "      a.click();\n",
+              "      div.remove();\n",
+              "    }\n",
+              "  "
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.Javascript object>"
+            ],
+            "application/javascript": [
+              "download(\"download_d73711a3-b24a-4bf4-9cb4-a3bb8984f811\", \"plan1_translated_german.pdf\", 97429)"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#NO Trim done as in the case of the initial(above)code\n",
+        "from reportlab.pdfgen import canvas\n",
+        "from reportlab.lib.pagesizes import letter\n",
+        "from textwrap import wrap\n",
+        "\n",
+        "output_file = \"plan1_translated_german.pdf\"\n",
+        "pdf_canvas = canvas.Canvas(output_file, pagesize=letter)\n",
+        "\n",
+        "# Set margins and font\n",
+        "left_margin = 40\n",
+        "top_margin = 750\n",
+        "line_height = 15\n",
+        "max_line_width = 90  # approx. max characters per line for standard font size\n",
+        "\n",
+        "# Start PDF generation\n",
+        "lines = german_text.split('\\n')\n",
+        "y = top_margin\n",
+        "\n",
+        "for line in lines:\n",
+        "    wrapped_lines = wrap(line, width=max_line_width)\n",
+        "    for wrapped_line in wrapped_lines:\n",
+        "        if y < 50:\n",
+        "            pdf_canvas.showPage()\n",
+        "            y = top_margin\n",
+        "        pdf_canvas.drawString(left_margin, y, wrapped_line)\n",
+        "        y -= line_height\n",
+        "\n",
+        "pdf_canvas.save()"
+      ],
+      "metadata": {
+        "id": "CdPTPNsqlvhz"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "ruVHFpDWmdOe"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
